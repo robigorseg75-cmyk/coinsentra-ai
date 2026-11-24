@@ -1,0 +1,29 @@
+services:
+  - type: worker            # private background process, no public URL
+    name: bybit-bot-v4
+    runtime: python
+    region: singapore       # pick a region where Bybit works for you
+    plan: starter           # background workers have no free plan
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot_v4.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: MODE
+        value: paper        # switch to live only after days of good paper results
+      - key: BYBIT_API_KEY
+        sync: false         # type these in the Render dashboard
+      - key: BYBIT_API_SECRET
+        sync: false
+      - key: LEVERAGE
+        value: "8"
+      - key: STATE_FILE
+        value: /var/data/state.json
+      - key: TELEGRAM_TOKEN # optional: trade alerts on your phone
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+    disk:
+      name: botdata
+      mountPath: /var/data
+      sizeGB: 1
